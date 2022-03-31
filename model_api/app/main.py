@@ -3,6 +3,8 @@ from datetime import datetime
 import pickle
 # load dateparser and stuff
 from CustomUnpickler import CustomUnpickler
+from typing import List
+from pydantic import BaseModel
 import pandas as pd
 import uvicorn
 import os
@@ -26,6 +28,20 @@ async def predict(weather: int, temp: int, felt_temp: int, humidity: int, windsp
 
   pred = model.predict(df)
   return round(pred[0])
+
+class Preds(BaseModel):
+  dt: datetime
+  temp: float
+  feels_like: float
+  humidity: int
+  wind_speed: int
+
+class MultiPredict(BaseModel):
+  data: List[Preds]
+
+@app.put("/multipredict/")
+async def multi_predict(preds: MultiPredict):
+  return preds
 
 if __name__ == "__main__":
     uvicorn.run("__main__:app", host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
