@@ -21,37 +21,11 @@ lon ="-120.740135"
 
 url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=minutely,daily,current&appid={api_key}&units=metrics"
 
-response = requests.get(url)
+meteo_response = requests.get(url)
 
-meteo_data = json.loads(response.text)
+meteo_data = json.loads(meteo_response.text)
 
 cf.set_config_file(offline=True)
-
-
-# CUSTOM DATAPARSER POUR FAIRE FONCTIONNER LE MODELE
-class DateParser(BaseEstimator, TransformerMixin):
-    def __init__(self):
-        super().__init__()
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X, y=None):
-        X = pd.to_datetime(X["datetime"])
-        return_X = pd.DataFrame(
-            {
-                "weekday": X.dt.weekday,
-                "hour": X.dt.hour,
-                "month": X.dt.month,
-                "year": X.dt.year,
-            }
-        )
-        return return_X
-    
-# CHARGEMENT DU MODELE DE PREDICTION
-
-model = pickle.load(open("lightgbm.pkl", "rb"))
-
 
 # Sidebar
 
@@ -84,8 +58,8 @@ if validation :
     if not current_date:
         url += f"&date_time={date_side}"
 
-    response = requests.get(url)
-    data = json.loads(response.text)
+    pred_response = requests.get(url)
+    data = json.loads(pred_response.text)
 
     st.header(url)
     st.header(data)
