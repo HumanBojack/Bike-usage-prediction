@@ -6,6 +6,7 @@ from CustomUnpickler import CustomUnpickler
 from typing import List
 from pydantic import BaseModel
 import pandas as pd
+import numpy as np
 import uvicorn
 import os
 
@@ -16,32 +17,50 @@ model = CustomUnpickler(open("app/lightgbm.pkl", "rb")).load()
 async def predict(weather: int, temp: int, felt_temp: int, humidity: int, windspeed: int, date_time: str | None = None):
   if not date_time:
     date_time = datetime.now()
-    
-  df = pd.DataFrame({
-    "datetime": pd.Series([date_time], dtype='str'),
-    "weather": pd.Series([weather], dtype='int'),
-    "temp": pd.Series([temp], dtype='int'),
-    "atemp": pd.Series([felt_temp], dtype='int'),
-    "humidity": pd.Series([humidity], dtype='int'),
-    "windspeed": pd.Series([windspeed], dtype='int')
-  })
 
+  df = to_df([date_time], [weather], [temp], [felt_temp], [humidity], [windspeed])
   pred = model.predict(df)
   return round(pred[0])
 
-class Preds(BaseModel):
-  dt: datetime
-  temp: float
-  feels_like: float
+class Features(BaseModel):
+  weather: int
+  temp: int
+  felt_temp: int
   humidity: int
-  wind_speed: int
+  windspeed: int
+  date_time: str | None = None
 
-class MultiPredict(BaseModel):
-  data: List[Preds]
+class FeaturesList(BaseModel):
+  data: List[Features]
+  count: None = None
 
-@app.put("/multipredict/")
-async def multi_predict(preds: MultiPredict):
-  return preds
+@app.post("/predict/")
+async def multi_predict(features: FeaturesList):
+  current_date = datetime.now()
+  for value in features.data:
+    if not value.date_time:
+      value.date_time = str(current_date)
+
+  features_arrays = [get_array(key, features) for key in ("date_time", "weather", "temp", "felt_temp", "humidity", "windspeed")]
+  df = to_df(*features_arrays)
+
+  preds = model.predict(df).round().astype(int)
+  features.count = preds.tolist()
+
+  return features
+
+def get_array(key, values):
+  return [dict(value)[key] for value in values.data]
+
+def to_df(date_time, weather, temp, felt_temp, humidity, windspeed):
+  return pd.DataFrame({
+    "datetime": pd.Series(date_time, dtype='str'),
+    "weather": pd.Series(weather, dtype='int'),
+    "temp": pd.Series(temp, dtype='int'),
+    "atemp": pd.Series(felt_temp, dtype='int'),
+    "humidity": pd.Series(humidity, dtype='int'),
+    "windspeed": pd.Series(windspeed, dtype='int')
+  })
 
 if __name__ == "__main__":
     uvicorn.run("__main__:app", host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
