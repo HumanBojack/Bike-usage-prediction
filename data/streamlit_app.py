@@ -10,8 +10,10 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Custom API base url
+base_api_url = "http://romainbs.azurewebsites.net"
+
 # API METEO => Make changes to not have api key in the code and to transform the response in a 1-4 integer
-# 
 
 api_key = "6f6890ed8c566a3b0f5763b583f17182"
 
@@ -19,11 +21,12 @@ lat = "47.751076"
 
 lon ="-120.740135"
 
-url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=minutely,daily,current&appid={api_key}&units=metrics"
+url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=minutely,daily,current&appid={api_key}&units=metric"
 
 meteo_response = requests.get(url)
 
-meteo_data = json.loads(meteo_response.text)
+# meteo_data = json.loads(meteo_response.text)
+meteo_data = meteo_response.json()
 
 cf.set_config_file(offline=True)
 
@@ -54,7 +57,7 @@ validation = st.sidebar.button('Validez votre choix')
 
 if validation : 
 
-    url = f"http://romainbs.azurewebsites.net/predict/?weather={weather}&temp={temp}&felt_temp={atemp}&humidity={humidity}&windspeed={windspeed}"
+    url = f"{base_api_url}/predict/?weather={weather}&temp={temp}&felt_temp={atemp}&humidity={humidity}&windspeed={windspeed}"
     if not current_date:
         url += f"&date_time={date_side}"
 
@@ -66,36 +69,34 @@ if validation :
 
 
 # LIVE TIME PREDICTION
-for i in range(0,47):
+features = {"data": []}
+for hour in meteo_data["hourly"]:
+  features["data"].append(
+    {
+      "date_time": str(datetime.utcfromtimestamp(hour["dt"])),
+      "weather": 0,
+      "temp": hour["temp"],
+      "felt_temp": hour["feels_like"],
+      "humidity": hour["humidity"],
+      "windspeed": hour["wind_speed"]
+    }
+  )
+
+url = f"{base_api_url}/predict"
+pred_response = requests.post(url, json=features)
+response = pred_response.json() 
+
+df = pd.DataFrame({
+    "datetime": [x['date_time'] for x in response['data']],
+    "weather": [x['weather'] for x in response['data']],
+    "temp": [x['temp'] for x in response['data']],
+    "atemp": [x['felt_temp'] for x in response['data']],
+    "humidity": [x['humidity'] for x in response['data']],
+    "windspeed": [x['windspeed'] for x in response['data']],
+    "count": response['count']
+  })
     
-    j = meteo_data["hourly"][i]
-        
-    lst = []
-    
-    
-    # lst.append(datetime.fromtimestamp(t))
-    lst.append(j["dt"])
-    
-    #weather
-    lst.append(0)
-    #temp
-    lst.append(j["temp"])
-    #atemp
-    lst.append(j["feels_like"])
-    #humidity
-    lst.append(j["humidity"])
-    #windspeed
-    lst.append(j["wind_speed"])
-    
-    df = df.append(pd.Series(lst, index =['datetime', 'season', 'holiday', 'workingday', 'weather', 'temp',
-    'atemp', 'humidity', 'windspeed'] ), ignore_index=True)
-    
-transform_data = model["preprocessor"].transform(df)
-    
-pred = model['model'].predict(transform_data)
-    
-df['label'] = pred
-fig = px.line(df, x="datetime", y="label", title='Croissance de la demande')
+fig = px.line(df, x="datetime", y="count", title='Croissance de la demande')
 st.plotly_chart(fig, use_container_width=True)
 st.dataframe(df)
 
