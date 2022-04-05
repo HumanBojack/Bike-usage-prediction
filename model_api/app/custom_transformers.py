@@ -21,6 +21,7 @@ class DateParser(BaseEstimator, TransformerMixin):
                 "season": X.dt.month % 12 // 3 + 1,
                 # "holiday":  X.dt.strftime('%d-%m').isin(HOLIDAYS),
                 "workingday": (X.dt.weekday.isin(range(5))) & (X.dt.strftime('%d-%m').isin(HOLIDAYS) == False),
+                # "afternoon": X.dt.hour >= 12
             }
         )
         return return_X

@@ -20,7 +20,8 @@ async def predict(weather: int, temp: int, felt_temp: int, humidity: int, windsp
 
   df = to_df([date_time], [weather], [temp], [felt_temp], [humidity], [windspeed])
   pred = model.predict(df)
-  return round(pred[0])
+
+  return max(0, round(pred[0]))
 
 class Features(BaseModel):
   weather: int
@@ -45,6 +46,8 @@ async def multi_predict(features: FeaturesList):
   df = to_df(*features_arrays)
 
   preds = model.predict(df).round().astype(int)
+  preds[preds < 0] = 0
+
   features.count = preds.tolist()
 
   return features
