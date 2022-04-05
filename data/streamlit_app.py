@@ -74,7 +74,7 @@ for hour in meteo_data["hourly"]:
   features["data"].append(
     {
       "date_time": str(datetime.utcfromtimestamp(hour["dt"])),
-      "weather": 0,
+      "weather": 1,
       "temp": hour["temp"],
       "felt_temp": hour["feels_like"],
       "humidity": hour["humidity"],
@@ -100,6 +100,98 @@ fig = px.line(df, x="datetime", y="count", title='Croissance de la demande')
 st.plotly_chart(fig, use_container_width=True)
 st.dataframe(df)
 
+# COLOMNES DE METEO
+
+col1, col2, col3 = st.columns(3)
+
+meteo_atm = df['weather'][0]
+
+temp_atm = df['temp'][0]
+
+# INDICES METEO
+
+meteo_plus_1 = df['weather'][1]
+
+meteo_plus_2 = df['weather'][2]
+
+meteo_plus_3 = df['weather'][3]
+
+# IMAGES A REMPLACER 
+
+image_meteo_1 = "https://openweathermap.org/img/wn/02d@2x.png"
+image_meteo_2 = "https://openweathermap.org/img/wn/04d@2x.png"
+image_meteo_3 = "https://openweathermap.org/img/wn/09d@2x.png"
+image_meteo_4 = "https://openweathermap.org/img/wn/11d@2x.png"
+
+# Premiere colomne
+
+with col1:
+  
+    st.header("Dans une heure")
+    
+    if meteo_plus_1 == 1:
+      st.write(str(df['temp'][1]), "°C")
+      st.image(image_meteo_1)
+      
+    if meteo_plus_1 == 2:
+      st.write(str(df['temp'][1]), "°C")
+      st.image(image_meteo_2)
+      
+    if meteo_plus_1 == 3:
+      st.write(str(df['temp'][1]), "°C")
+      st.image(image_meteo_3)
+      
+    if meteo_plus_1 == 4:
+      st.write(str(df['temp'][1]), "°C")
+      st.image(image_meteo_4)
+      
+# Deuxieme colomne
+
+with col2:
+  
+    st.header("Dans deux heures")
+    
+    if meteo_plus_2 == 1:
+      st.write(str(df['temp'][2]), "°C")
+      st.image(image_meteo_1)
+      
+    if meteo_plus_2 == 2:
+      st.write(str(df['temp'][2]), "°C")
+      st.image(image_meteo_2)
+      
+    if meteo_plus_2 == 3:
+      st.write(str(df['temp'][2]), "°C")
+      st.image(image_meteo_3)
+      
+    if meteo_plus_2 == 4:
+      st.write(str(df['temp'][2]), "°C")
+      st.image(image_meteo_4)
+      
+      
+# Troisieme colomne
+
+with col3:
+  
+    st.header("Dans trois heures")
+    
+    if meteo_plus_3 == 1:
+      st.write(str(df['temp'][3]), "°C")
+      st.image(image_meteo_1)
+      
+    if meteo_plus_3 == 2:
+      st.write(str(df['temp'][3]), "°C")
+      st.image(image_meteo_2)
+      
+    if meteo_plus_3 == 3:
+      st.write(str(df['temp'][3]), "°C")
+      st.image(image_meteo_3)
+      
+    if meteo_plus_3 == 4:
+      st.write(str(df['temp'][3]), "°C")
+      st.image(image_meteo_4)
+    
+      
+    
 
 
 
