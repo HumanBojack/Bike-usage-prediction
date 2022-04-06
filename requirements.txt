@@ -27,7 +27,7 @@ mlflow == 1.23.1
 # vlille-reg/solo_work/romain/data_analysis.ipynb: 3
 # vlille-reg/solo_work/romain/model.ipynb: 2
 # vlille-reg/solo_work/romain/pycaret.ipynb: 2
-numpy == 1.22.3
+numpy == 1.21.5
 
 # vlille-reg/data/streamlit_app.py: 1
 # vlille-reg/model_api/app/custom_transformers.py: 2
