@@ -73,4 +73,4 @@ streamlit == 1.8.1
 # vlille-reg/model_api/app/main.py: 10
 uvicorn == 0.17.6
 
-dotenv == 2.7.6
+python-dotenv == 0.20.0
