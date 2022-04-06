@@ -18,9 +18,9 @@ base_api_url = "http://romainbs.azurewebsites.net"
 
 api_key = "6f6890ed8c566a3b0f5763b583f17182"
 
-lat = "47.751076"
+lat = "38.907367783128684"
 
-lon ="-120.740135"
+lon ="-77.03659139978163"
 
 url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=minutely,daily,current&appid={api_key}&units=metric"
 
