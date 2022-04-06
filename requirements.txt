@@ -59,16 +59,6 @@ pydantic == 1.9.0
 # vlille-reg/data/streamlit_app.py: 6
 requests == 2.27.1
 
-# vlille-reg/data/streamlit_app.py: 4
-# vlille-reg/model_api/app/custom_transformers.py: 1
-# vlille-reg/solo_work/michelle/Brief_Vlille_210322_analyse.ipynb: 39
-# vlille-reg/solo_work/michelle/Brief_Vlille_220322_model.ipynb: 61
-# vlille-reg/solo_work/romain/data_analysis.ipynb: 50,64
-# vlille-reg/solo_work/romain/model.ipynb: 11,12,64
-# vlille-reg/solo_work/romain/pycaret.ipynb: 25
-# vlille-reg/solo_work/sofiane/model.ipynb: 105
-scikit_learn == 1.0.2
-
 # vlille-reg/solo_work/romain/data_analysis.ipynb: 4
 # vlille-reg/solo_work/romain/model.ipynb: 3
 # vlille-reg/solo_work/romain/pycaret.ipynb: 3
