@@ -39,7 +39,7 @@ numpy == 1.21.5
 # vlille-reg/solo_work/romain/pycaret.ipynb: 1
 # vlille-reg/solo_work/sofiane/data_analysis.ipynb: 1
 # vlille-reg/solo_work/sofiane/model.ipynb: 1
-pandas == 1.4.1
+pandas == 1.3.5
 
 # vlille-reg/data/streamlit_app.py: 9
 # vlille-reg/solo_work/romain/data_analysis.ipynb: 5
