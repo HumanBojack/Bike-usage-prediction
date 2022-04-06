@@ -68,6 +68,22 @@ if validation :
     st.header(url)
     st.header(data)
 
+# Calculate the weather level (1 to 4) based on conditions
+def get_weather_level(hour):
+  weather_level = []
+  for weather in hour["weather"]:
+    weather_id = int(weather["id"])
+
+    if weather_id == 301 | 300<=weather_id<=301:
+      weather_level.append(2)
+    elif 702<=weather_id<=761 | 600<=weather_id<=601 | 200<=weather_id<=201:
+      weather_level.append(3)
+    elif 502<=weather_id<=531 | 302<=weather_id<=321 | 202<=weather_id<=232 | 602<=weather_id<=622 | 762<=weather_id<=781:
+      weather_level.append(4)
+    else:
+      weather_level.append(1)
+
+  return max(weather_level)
 
 # LIVE TIME PREDICTION
 features = {"data": []}
@@ -75,7 +91,7 @@ for hour in meteo_data["hourly"]:
   features["data"].append(
     {
       "date_time": str(datetime.utcfromtimestamp(hour["dt"])),
-      "weather": 1,
+      "weather": get_weather_level(hour),
       "temp": hour["temp"],
       "felt_temp": hour["feels_like"],
       "humidity": hour["humidity"],
