@@ -63,8 +63,10 @@ if validation :
     pred_response = requests.get(url)
     data = json.loads(pred_response.text)
 
-    st.header(url)
-    st.header(data)
+    
+    st.header(f"Dans ces conditions {data} vélos seront empruntés")
+    
+    st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
 
 # Calculate the weather level (1 to 4) based on conditions
 def get_weather_level(hour):
