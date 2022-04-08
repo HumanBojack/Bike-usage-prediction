@@ -16,8 +16,6 @@ base_api_url = os.environ.get("PREDICTION_API_URL")
 
 api_key = os.environ.get("WEATHER_API")
 
-api_key = "6f6890ed8c566a3b0f5763b583f17182"
-
 lat = "38.907367783128684"
 
 lon ="-77.03659139978163"
@@ -149,12 +147,12 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
 
 
-st.image("personnes.jpg")
+st.image("https://github.com/HumanBojack/Bike-usage-prediction/blob/main/data/personnes.jpg?raw=true")
 
 st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
 
 # Columns images 
-images = ["check.png","quick.png","thumb-up.png"]
+images = ["https://github.com/HumanBojack/Bike-usage-prediction/blob/main/data/check.png?raw=true","https://github.com/HumanBojack/Bike-usage-prediction/blob/main/data/quick.png?raw=true","https://github.com/HumanBojack/Bike-usage-prediction/blob/main/data/thumb-up.png?raw=true"]
 headers=["Simple","Rapide","Pas cher"]
 textes = ["Disponible 24h/24 et 7j/7 parmi les 223 stations.","2 minutes suffisent pour prendre un abonnement occasionnel et retirer un vélo.","Service accessible à partir de 1,75€."]
 
