@@ -8,6 +8,7 @@ class DateParser(BaseEstimator, TransformerMixin):
         super().__init__()
 
     def fit(self, X, y=None):
+        self.columns = X.columns
         return self
 
     def transform(self, X, y=None):
@@ -19,9 +20,14 @@ class DateParser(BaseEstimator, TransformerMixin):
                 "month": X.dt.month,
                 "year": X.dt.year,
                 "season": X.dt.month % 12 // 3 + 1,
-                # "holiday":  X.dt.strftime('%d-%m').isin(HOLIDAYS),
-                "workingday": (X.dt.weekday.isin(range(5))) & (X.dt.strftime('%d-%m').isin(HOLIDAYS) == False),
-                # "afternoon": X.dt.hour >= 12
+                "workingday": 
+                (X.dt.weekday.isin(range(5))) &
+                (X.dt.strftime('%d-%m').isin(HOLIDAYS) == False),
             }
         )
         return return_X
+                # "holiday":  X.dt.strftime('%d-%m').isin(HOLIDAYS),
+                # "afternoon": X.dt.hour >= 12
+
+    def get_feature_names_out(self, input_features=None):
+        return self.columns
