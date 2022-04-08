@@ -16,8 +16,6 @@ base_api_url = os.environ.get("PREDICTION_API_URL")
 
 api_key = os.environ.get("WEATHER_API")
 
-api_key = "6f6890ed8c566a3b0f5763b583f17182"
-
 lat = "38.907367783128684"
 
 lon ="-77.03659139978163"
@@ -120,12 +118,15 @@ df = pd.DataFrame({
 def meteo_url(icon):
   return f"https://openweathermap.org/img/wn/{icon}@2x.png"
 
-st.header("Actuellement") 
-st.write("Il fait",str(df['temp'][0]), "°C")
-st.write(str(df['count'][0]),"vélos sont empruntés")
-icon = meteo_data["hourly"][0]["weather"][0]["icon"]
+_, center_col, _= st.columns(3)
+with center_col:
+  st.header("Actuellement") 
+  st.write("Il fait",str(df['temp'][0]), "°C")
+  st.write(str(df['count'][0]),"vélos sont empruntés")
+  icon = meteo_data["hourly"][0]["weather"][0]["icon"]
 
-st.image(meteo_url(icon))
+  st.image(meteo_url(icon))
+
 
 
 # Three hours weather prediction
@@ -147,7 +148,6 @@ fig.update_yaxes(showgrid=False)
 st.plotly_chart(fig, use_container_width=True)
 
 st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
-
 
 st.image("personnes.jpg")
 
