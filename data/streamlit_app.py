@@ -114,6 +114,8 @@ df = pd.DataFrame({
   })
     
 
+
+    
 # Live weather prediction
 def meteo_url(icon):
   return f"https://openweathermap.org/img/wn/{icon}@2x.png"
@@ -124,7 +126,6 @@ st.write(str(df['count'][0]),"vélos sont empruntés")
 icon = meteo_data["hourly"][0]["weather"][0]["icon"]
 
 st.image(meteo_url(icon))
-
 
 
 # Three hours weather prediction
@@ -141,5 +142,27 @@ for index, col in enumerate(st.columns(3)):
     
 
 fig = px.line(df, x="datetime", y="count", title='Croissance de la demande')
+fig.update_xaxes(showgrid=False)
+fig.update_yaxes(showgrid=False)
 st.plotly_chart(fig, use_container_width=True)
+
+st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
+
+
+st.image("personnes.jpg")
+
+st.markdown("""<hr style="height:10px;border:none;color:#333;background-color:#333;" /> """, unsafe_allow_html=True)
+
+# Columns images 
+images = ["check.png","quick.png","thumb-up.png"]
+headers=["Simple","Rapide","Pas cher"]
+textes = ["Disponible 24h/24 et 7j/7 parmi les 223 stations.","2 minutes suffisent pour prendre un abonnement occasionnel et retirer un vélo.","Service accessible à partir de 1,75€."]
+
+for index, col in enumerate(st.columns(3)):
+  with col:
+    st.image(images[index], use_column_width=True)
+    st.header(headers[index])
+    st.write(textes[index])
+    
+
     
